@@ -29,7 +29,7 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                        <!-- acordeon -->
+                        <!-- acordeon de estaciones-->
                         <div class="accordion" id="accordionExample">
                             <?php foreach (Metro::getLineas() as $metro) : ?>
                                 <div class="accordion-item">
@@ -46,10 +46,12 @@
                                                     <h6>Status</h6>
                                                 </li>
                                                 <?php foreach (Metro::getEstacionesXLineas($metro['idLinea']) as $estacion) : ?>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        <?= $estacion['nombre'] ?>
-                                                        <span class="badge bg-<?= $estacion['color'] ?> rounded-pill"><?= $estacion['status'] ?></span>
-                                                    </li>
+                                                    <?php if (!is_null($estacion)) : ?>
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <?= $estacion['nombre'] ?>
+                                                            <span class="badge bg-<?= $estacion['color'] ?> rounded-pill"><?= $estacion['status'] ?></span>
+                                                        </li>
+                                                    <?php endif ?>
                                                 <?php endforeach; ?>
                                             </ul>
                                         </div>
@@ -59,21 +61,56 @@
                         </div>
                     </div>
                     <div class="tab-pane fade p-4" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                        <div class="alert alert-success d-none" role="alert" id='alert-estacion'>
-                            Se a gaurdado la estacion
+                        <div class="d-flex gap-3">
+                            <div class="col col-4">
+                                <div class="alert alert-success d-none" role="alert" id='alert-estacion'>
+                                    Se a gaurdado la estacion
+                                </div>
+                                <p>Dar de alta una estacion nueva</p>
+                                <form action="metro.php" method="POST" id="altaEstaciones">
+                                    <div class="mb-3">
+                                        <label for="nombreEstacion" class="form-label">Nombre de la estacion</label>
+                                        <input type="text" class="form-control" id="nombreEstacion" name="nombreEstacion">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="descripcionEstacion" class="form-label">Descripcion de la estacion</label>
+                                        <input type="text" class="form-control" id="descEstacion" name="descEstacion">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Crear Estacion</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col col-8 ml-4 table-responsive overflow-y-auto" style="max-height: 250px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Estacion</th>
+                                            <th scope="col">Descripcion</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <?php foreach (Metro::getEstaciones() as $estacion) : ?>
+                                            <tr>
+                                                <th><?= $estacion['id'] ?></th>
+                                                <td><?= $estacion['nombre'] ?></td>
+                                                <td><?= $estacion['descripcion'] ?></td>
+                                                <td><?= $estacion['status'] ?></td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                                        <button type="button" class="btn btn-primary" id="editar" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
+                                                        <button type="button" class="btn btn-danger">Eliminar</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <p>Dar de alta una estacion nueva</p>
-                        <form action="metro.php" method="POST" id="altaEstaciones">
-                            <div class="mb-3">
-                                <label for="nombreEstacion" class="form-label">Nombre de la estacion</label>
-                                <input type="text" class="form-control" id="nombreEstacion" name="nombreEstacion">
-                            </div>
-                            <div class="mb-3">
-                                <label for="descripcionEstacion" class="form-label">Descripcion de la estacion</label>
-                                <input type="text" class="form-control" id="descEstacion" name="descEstacion">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
                     </div>
                     <div class="tab-pane fade p-4" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
                         <div class="alert alert-success d-none" role="alert" id='alert-estacion'>
@@ -93,6 +130,25 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

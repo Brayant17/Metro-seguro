@@ -36,16 +36,39 @@ class Metro{
         return $datos;
     }
 
+    public static function getEstaciones(){
+        $conexion = Connect::conexion();
+        $sql = "SELECT * FROM estación";
+        $result = $conexion->query($sql);
+        if($result->num_rows > 0){
+            while($row = $result->fetch_assoc()){
+                $datos[] = array(
+                    'id' => $row['ID_E'],
+                    'nombre' => $row['Nombre_E'],
+                    'descripcion' => $row['Descripcion_E'],
+                    'status' => $row['Status_E'],
+                );
+            }
+        }else{
+            $datos[] = null;
+        }
+        return $datos; 
+    }
+
     public static function getEstacionesXLineas($idLinea){
         $conexion = Connect::conexion();
         $sql = "SELECT * FROM `del` LEFT JOIN estación AS e ON del.ID_E = e.ID_E WHERE ID_L = $idLinea;";
         $result = $conexion->query($sql);
-        while($row = $result->fetch_assoc()){
-            $datos[] = array(
-                'nombre' => $row['Nombre_E'],
-                'status' => $row['Status_E'],
-                'color' => BANDERAS[$row['Status_E']],
-            );
+        if($result->num_rows > 0){
+            while($row = $result->fetch_assoc()){
+                $datos[] = array(
+                    'nombre' => $row['Nombre_E'],
+                    'status' => $row['Status_E'],
+                    'color' => BANDERAS[$row['Status_E']],
+                );
+            }
+        }else{
+            $datos[] = null;
         }
         return $datos;
     }

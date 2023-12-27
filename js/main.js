@@ -20,6 +20,7 @@ $(function () {
                 }, 5000);
                 let nombreEstacion = $('#nombreEstacion').val('');
                 let descripcion = $('#descEstacion').val('');
+                // refresh a la tabla
             }
         });
     });
@@ -44,7 +45,19 @@ $(function () {
                 }, 5000);
                 let nombreEstacion = $('#nombreEstacion').val('');
                 let descripcion = $('#descEstacion').val('');
+                tablaEstaciones()
             }
         });
     });
+
+    $('#editar').on('click', ()=>{
+        console.log($('#editar').data-bs-target)
+    })
+
+    function tablaEstaciones(){
+        console.log('hola')
+    }
+
+    
 })
+
